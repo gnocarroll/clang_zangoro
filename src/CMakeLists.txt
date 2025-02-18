@@ -1,3 +1,3 @@
 target_sources(zangoro
-    PUBLIC main.c
+    PUBLIC main.c memutils.c bitset.c
 )
