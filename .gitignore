@@ -7,3 +7,9 @@
 *.a
 *.o
 *.dll
+
+# Possible locations to put build files that you do not want saved
+
+bin
+bld
+build
