@@ -1,8 +1,11 @@
 #include "bitset.h"
 
+#include <stdbool.h>
+#include <stddef.h>
+
 #include "memutils.h"
 
-#define TRUE8 ((char) 1)
+#define TRUE8  ((char) 1)
 #define FALSE8 ((char) 0)
 
 #define BOOL8(x) ((x) ? TRUE8 : FALSE8)
@@ -14,15 +17,15 @@ void *bitset_zero(void *bitset, size_t n_bits) {
 }
 
 bool bitset_get(void *bitset, size_t idx) {
-    return ((char *) bitset)[idx / 8] & (TRUE8 >> (idx % 8));
+    return ((char *) bitset)[idx / 8] & (TRUE8 << (7 - idx % 8));
 }
 
 bool bitset_set(void *bitset, size_t idx, bool val) {
     char* ptr = ((char*) bitset) + (idx / 8);
-    int sh = idx % 8;
+    int sh = 7 - idx % 8;
 
-    *ptr &= ~(TRUE8      >> sh);
-    *ptr |=  (BOOL8(val) >> sh);
+    *ptr &= ~(TRUE8      << sh);
+    *ptr |=  (BOOL8(val) << sh);
 
     return val;
 }

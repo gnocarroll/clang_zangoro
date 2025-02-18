@@ -1,5 +1,8 @@
 // Basic bitset functionality for use with memory buffer
 
+#include <stdbool.h>
+#include <stddef.h>
+
 // note: bitset_zero will round up to the next byte so it may zero beyond the
 // precise number of bits requested
 
