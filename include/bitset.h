@@ -1,3 +1,6 @@
+#ifndef BITSET_H
+#define BITSET_H
+
 // Basic bitset functionality for use with memory buffer
 
 #include <stdbool.h>
@@ -15,3 +18,5 @@ bool bitset_set(void *bitset, size_t idx, bool val);
 char *bitset_str(char *dst, void *bitset, size_t n_bits);
 
 #define BITSET_SIZE(n_bits) ((n_bits - 1) / sizeof(char) + 1)
+
+#endif // BITSET_H
