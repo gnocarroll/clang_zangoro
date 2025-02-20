@@ -1,4 +1,9 @@
-cmake_minimum_required(VERSION 3.31)
+cmake_minimum_required(VERSION 3.28)
+
+if(MSVC) # will use vcpkg to get dependencies
+    set(CMAKE_TOOLCHAIN_FILE ${CMAKE_SOURCE_DIR}/CMakePresets.json)
+endif()
+
 project(zangoro)
 
 set(CMAKE_C_STANDARD 99)
