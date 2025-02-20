@@ -6,6 +6,8 @@
 
 #include "mynumdef.h"
 
+#define NANO_PER_SEC (1000000000)
+
 static bool should_quit = false;
 
 // data structures to store information on user input
@@ -19,11 +21,11 @@ static i64  key_timestamps[SDL_SCANCODE_COUNT];
 bool scan_down (SDL_Scancode scancode) { return key_states[scancode]; }
 int  scan_count(SDL_Scancode scancode) { return key_counts[scancode]; }
 
-i64 scan_time(SDL_Scancode scancode) {
-    return key_timestamps[scancode] / 1000; // to ms
+float scan_time(SDL_Scancode scancode) {
+    return key_timestamps[scancode] / NANO_PER_SEC; // to seconds
 }
-i64 scan_deltat(SDL_Scancode scancode) { // how long ago
-    return (SDL_GetTicksNS() - key_timestamps[scancode]) / 1000;
+float scan_deltat(SDL_Scancode scancode) { // how long ago
+    return (SDL_GetTicksNS() - key_timestamps[scancode]) / NANO_PER_SEC;
 }
 
 // access information about which keycodes were input, information is stored
@@ -36,10 +38,10 @@ int key_count(SDL_Keycode key) {
     return scan_count(SDL_GetScancodeFromKey(key, NULL));
 }
 
-i64 key_time(SDL_Keycode key) {
+float key_time(SDL_Keycode key) {
     return scan_time(SDL_GetScancodeFromKey(key, NULL));
 }
-i64 key_deltat(SDL_Keycode key) {
+float key_deltat(SDL_Keycode key) {
     return scan_deltat(SDL_GetScancodeFromKey(key, NULL));
 }
 
@@ -56,15 +58,15 @@ static void handle_should_quit(const SDL_Event *event) {
     should_quit = true;
 }
 
-static void handle_SDL_EVENT_QUIT(const SDL_Event* event) {
+HANDLER_FUNC(SDL_EVENT_QUIT, event) {
     handle_should_quit(event);
 }
 
-static void handle_SDL_EVENT_WINDOW_DESTROYED(const SDL_Event* event) {
+HANDLER_FUNC(SDL_EVENT_WINDOW_DESTROYED, event) {
     handle_should_quit(event);
 }
 
-static void handle_SDL_EVENT_WINDOW_CLOSE_REQUESTED(const SDL_Event* event) {
+HANDLER_FUNC(SDL_EVENT_WINDOW_CLOSE_REQUESTED, event) {
     handle_should_quit(event);
 }
 

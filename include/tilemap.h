@@ -1,6 +1,8 @@
 #ifndef TILEMAP_H
 #define TILEMAP_H
 
+#define 
+
 #define TILE_GROUP_WIDTH (100)
 
 #define TILE_UP    (0)
