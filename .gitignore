@@ -1,3 +1,8 @@
+# Visual Studio
+
+.vs
+vcpkg_installed
+
 # Mac
 
 *.DS_Store
@@ -13,3 +18,4 @@
 bin
 bld
 build
+out
