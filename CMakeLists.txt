@@ -32,5 +32,5 @@ find_package(Boost       REQUIRED)
 find_package(Threads     REQUIRED)
 
 target_link_libraries(zangoro
-    PRIVATE SDL3::SDL3 websocketpp::websocketpp Boost::headers Threads::threads
+    PRIVATE SDL3::SDL3 websocketpp::websocketpp Boost::headers Threads::Threads
 )

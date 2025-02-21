@@ -3,3 +3,4 @@ target_sources(zangoro
 )
 
 add_subdirectory(networking)
+add_subdirectory(scratch)

@@ -4,6 +4,12 @@
  * This is from the tutorials code provided with websocketpp, which is used on
  * the server and PC client for Zangoro. I have made some slight modifications
  * to make this more suited to how I want to use it.
+ *
+ * Not gonna mark all changes since may modify heavily
+ * 
+ * websocketpp/tutorials/utility_client/step6.cppsee commit cd4af12
+ * https://github.com/zaphoyd/websocketpp/blob/master/tutorials/
+ *     utility_client/step6.cpp
  */
 
 /*
@@ -32,10 +38,9 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// **NOTE:** This file is a snapshot of the WebSocket++ utility client tutorial.
-// Additional related material can be found in the tutorials/utility_client
-// directory of the WebSocket++ repository.
+#include "networking/websocketpp_client.h"
 
+#define ASIO_STANDALONE
 #include <websocketpp/config/asio_no_tls_client.hpp>
 #include <websocketpp/client.hpp>
 
@@ -52,7 +57,7 @@ typedef websocketpp::client<websocketpp::config::asio_client> client;
 
 // adding map below to store binary data received on connections
 
-static std::map<int,std::string> conn_buffs;
+static std::map<int,std::string> conn_bufs;
 
 class connection_metadata {
 public:
@@ -100,7 +105,7 @@ public:
 
         // add received data to respective buffer
 
-        conn_bufs[id] += msg->get_payload();
+        conn_bufs[m_id] += msg->get_payload();
     }
 
     websocketpp::connection_hdl get_hdl() const {
@@ -243,13 +248,13 @@ public:
         return 0;
     }
 
-    void send(int id, std::string message) {
+    int send(int id, std::string message) {
         websocketpp::lib::error_code ec;
         
         con_list::iterator metadata_it = m_connection_list.find(id);
         if (metadata_it == m_connection_list.end()) {
             std::cout << "> No connection found with id " << id << std::endl;
-            return;
+            return -1;
         }
         
         m_endpoint.send(
@@ -260,10 +265,11 @@ public:
 
         if (ec) {
             std::cout << "> Error sending message: " << ec.message() << std::endl;
-            return;
+            return -1;
         }
         
         metadata_it->second->record_sent_message(message);
+        return 0;
     }
 
     connection_metadata::ptr get_metadata(int id) const {
@@ -360,7 +366,7 @@ static int _main() {
 
 #include "networking/constants.h"
 
-std::atomic<int> connections = 0;
+std::atomic<int> connections(0);
 websocket_endpoint endpoint;
 
 int websocketpp_connect(const char *url) {
@@ -374,7 +380,7 @@ int websocketpp_connect(const char *url) {
 }
 
 int websocketpp_send(int conn_id, const void *msg, size_t count) {
-    endpoint.send(id, std::string((char*) msg, count));
+    return endpoint.send(conn_id, std::string((char*) msg, count));
 }
 
 int websocketpp_recv(int conn_id, const void *buf, size_t max) {
@@ -382,7 +388,10 @@ int websocketpp_recv(int conn_id, const void *buf, size_t max) {
 }
 
 int websocketpp_close(int conn_id) {
-    if (endpoint.close(id, websocketpp::close::status::normal, "QUIET") == -1)
+    if (endpoint.close(
+        conn_id,
+        websocketpp::close::status::normal, "QUIET"
+    ) == -1)
         return -1;
 
     connections--;

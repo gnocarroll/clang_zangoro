@@ -12,6 +12,7 @@
 #include <SDL3/SDL_main.h>
 
 #include "events.h"
+#include "scratch/test_feature.h"
 
 #define TITLE "ZANGORO"
 
@@ -55,6 +56,10 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char **argv) {
     // cleanup window, renderer, and subsystems at exit
 
     atexit(destroy_sdl);
+
+    // use to test random stuff being implemented
+
+    test_feature(); // scratch/test_feature.c
 
     return SDL_APP_CONTINUE;
 }
