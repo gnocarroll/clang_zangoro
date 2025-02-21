@@ -19,3 +19,10 @@ bin
 bld
 build
 out
+
+# idk what these are
+
+*.ce
+*.cppe
+*.he
+*.hppe
