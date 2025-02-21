@@ -39,7 +39,7 @@ long ring_buffer_count(ring_buffer *rb) {
 // add data to ring buffer
 
 long ring_buffer_append(ring_buffer *rb, void *src, size_t count) {
-    if (rb->size <= 0) return (long) -1;
+    if (rb->size <= 0) return 0; // can't add anything
 
     long src_idx = 0;
 
