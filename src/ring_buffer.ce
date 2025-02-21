@@ -22,11 +22,7 @@ void ring_buffer_init(ring_buffer* rb) {
     rb->is_empty = true;
 }
 
-void ring_buffer_set_size(ring_buffer* rb, size_t size) {
-    rb->size = size;
-}
-
-long ring_buffer_count(ring_buffer *rb) {
+ssize_t ring_buffer_count(ring_buffer *rb) {
     if (rb->size <= 0 || rb->is_empty) return 0;
 
     if (rb->begin >= rb->end) {
@@ -38,10 +34,10 @@ long ring_buffer_count(ring_buffer *rb) {
 
 // add data to ring buffer
 
-long ring_buffer_append(ring_buffer *rb, void *src, size_t count) {
-    if (rb->size <= 0) return (long) -1;
+ssize_t ring_buffer_append(ring_buffer *rb, void *src, size_t count) {
+    if (rb->size <= 0) return (ssize_t) -1;
 
-    long src_idx = 0;
+    ssize_t src_idx = 0;
 
     while (src_idx < count) {
         if (rb->end == rb->begin) {
@@ -60,10 +56,10 @@ long ring_buffer_append(ring_buffer *rb, void *src, size_t count) {
 
 // consume / remove data from ring buffer
 
-long ring_buffer_consume(ring_buffer *rb, void *dst, size_t count) {
+ssize_t ring_buffer_consume(ring_buffer *rb, void *dst, size_t count) {
     if ((rb->size <= 0) || (rb->is_empty)) return 0;
 
-    long src_idx = 0;
+    ssize_t src_idx = 0;
 
     while (src_idx < count) {
         ((char *) dst)[src_idx++] = rb->data[rb->begin++];
